@@ -9,7 +9,7 @@ export const AuthLoader = () => {
   const [user, setUser] = useAtom(userAtom);
 
   useEffect(() => {
-    const handleAuthStateChange = async (event, session) => {
+    const handleAuthStateChange = async (event: string, session: { user: { id: string; }; access_token: string; } | null) => {
       if (event === 'SIGNED_OUT') {
         await handleSignedOut();
       } else if (event === 'SIGNED_IN' && session) {
@@ -24,17 +24,22 @@ export const AuthLoader = () => {
       }
     };
 
-    const handleSignedIn = async (session) => {
+    const handleSignedIn = async (session: { user: { id: string; }; access_token: string; }) => {
       if (user?.id !== session.user.id) {
         await apiClient.api.private.session
           .$post({ body: { jwt: session.access_token } })
           .catch(returnNull);
-        const fetchedUser = await apiClient.api.private.users._userId(session.user.id).$get().catch(returnNull);
+        const fetchedUser = await apiClient.api.private.users
+          ._userId(session.user.id)
+          .$get()
+          .catch(returnNull);
         setUser(fetchedUser);
       }
     };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(handleAuthStateChange);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(handleAuthStateChange);
 
     return () => subscription.unsubscribe();
   }, [user?.id, setUser]);
