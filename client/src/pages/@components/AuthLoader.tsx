@@ -11,13 +11,16 @@ export const AuthLoader = () => {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_, session) => {
-      if (session === null && user?.id !== null) {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT' && user?.id !== null) {
         await apiClient.api.private.session.$delete().catch(returnNull);
         setUser(null);
-      } else if (session !== null && user?.id !== session.user.id) {
-        await apiClient.api.private.session.$post({ body: { jwt: session?.access_token } }).catch(returnNull);
-        await apiClient.api.private.me.$post().catch(returnNull).then(setUser);
+      } else if (event === 'SIGNED_IN' && session && user?.id !== session.user.id) {
+        await apiClient.api.private.session
+          .$post({ body: { jwt: session.access_token } })
+          .catch(returnNull);
+        const fetchedUser = await apiClient.api.private.users._userId(session.user.id).$get().catch(returnNull);
+        setUser(fetchedUser);
       }
     });
 

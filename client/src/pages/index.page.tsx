@@ -9,7 +9,7 @@ import styles from './index.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
-  const [posts, setPosts] = useState<Post[]>();
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const fetchPosts = async () => {
     const posts = await apiClient.api.public.posts.$get().catch(returnNull);
@@ -21,7 +21,7 @@ const Home = () => {
     fetchPosts();
   }, [user?.id]);
 
-  if (!posts) return <div>Loading...</div>;
+  if (posts.length === 0) return <div>Loading...</div>;
 
   return (
     <>
