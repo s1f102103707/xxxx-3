@@ -1,4 +1,4 @@
-import type { PostModel } from '$/api/@types/models';
+import type { Post } from '$/api/@types';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
@@ -9,7 +9,7 @@ import styles from './index.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
-  const [posts, setPosts] = useState<PostModel[]>();
+  const [posts, setPosts] = useState<Post[]>();
 
   const fetchPosts = async () => {
     const posts = await apiClient.api.public.posts.$get().catch(returnNull);
