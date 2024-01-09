@@ -9,7 +9,10 @@ export const AuthLoader = () => {
   const [user, setUser] = useAtom(userAtom);
 
   useEffect(() => {
-    const handleAuthStateChange = async (event: string, session: { user: { id: string; }; access_token: string; } | null) => {
+    const handleAuthStateChange = async (
+      event: string,
+      session: { user: { id: string }; access_token: string } | null
+    ) => {
       if (event === 'SIGNED_OUT') {
         await handleSignedOut();
       } else if (event === 'SIGNED_IN' && session) {
@@ -18,13 +21,13 @@ export const AuthLoader = () => {
     };
 
     const handleSignedOut = async () => {
-      if (user?.id !== null) {
+      if (user?.id !== undefined) {
         await apiClient.api.private.session.$delete().catch(returnNull);
         setUser(null);
       }
     };
 
-    const handleSignedIn = async (session: { user: { id: string; }; access_token: string; }) => {
+    const handleSignedIn = async (session: { user: { id: string }; access_token: string }) => {
       if (user?.id !== session.user.id) {
         await apiClient.api.private.session
           .$post({ body: { jwt: session.access_token } })
