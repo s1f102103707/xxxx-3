@@ -12,7 +12,7 @@ const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   const fetchPosts = async () => {
-    const posts = await apiClient.api.public.posts.$get().catch(returnNull);
+    const posts = await apiClient.public.posts.$get().catch(returnNull);
 
     if (posts !== null) setPosts(posts);
   };
