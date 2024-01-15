@@ -7,5 +7,5 @@ export default defineController(() => ({
       data: body,
     });
     return { status: 201, body: post };
-  }
+  },
 }));

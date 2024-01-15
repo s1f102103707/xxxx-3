@@ -7,9 +7,9 @@ export default defineController(() => ({
       data: {
         text: body.text,
         postId: params.postId,
-        authorId: body.authorId
-      }
+        userId: body.userId,
+      },
     });
     return { status: 201, body: comment };
-  }
+  },
 }));
