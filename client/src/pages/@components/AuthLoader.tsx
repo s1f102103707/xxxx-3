@@ -29,7 +29,10 @@ export const AuthLoader = () => {
 
     const handleSignedIn = async (session: { user: { id: string }; access_token: string }) => {
       if (user?.id !== session.user.id) {
-        const fetchedUser = await apiClient.api.private.users._userId(session.user.id).$get().catch(returnNull);
+        const fetchedUser = await apiClient.api.private.users
+          ._userId(session.user.id)
+          .$get()
+          .catch(returnNull);
         setUser(fetchedUser);
       }
     };
