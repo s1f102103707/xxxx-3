@@ -6,7 +6,7 @@ export type Methods = {
     status: 200
     /** Post updated successfully */
     resBody: Types.Post
-    reqBody: Types.Post
+    reqBody: Types.PostUpdate
   }
 
   delete: {

@@ -6,7 +6,7 @@ export type Methods = {
     status: 200
     /** Comment updated successfully */
     resBody: Types.Comment
-    reqBody: Types.Comment
+    reqBody: Types.CommentUpdate
   }
 
   delete: {
