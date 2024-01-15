@@ -1,13 +1,13 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Animal-like Web Service API",
+    "title": "Blog Service API",
     "version": "1.0.0",
-    "description": "API for a web service that resembles an animal-themed social platform."
+    "description": "API for a blogging platform similar to 'b'."
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000/"
     }
   ],
   "paths": {
@@ -16,7 +16,7 @@
         "summary": "List all published posts",
         "responses": {
           "200": {
-            "description": "An array of posts",
+            "description": "Array of published posts",
             "content": {
               "application/json": {
                 "schema": {
@@ -46,7 +46,7 @@
         ],
         "responses": {
           "200": {
-            "description": "A single post",
+            "description": "A single published post",
             "content": {
               "application/json": {
                 "schema": {
@@ -61,63 +61,6 @@
         }
       }
     },
-    "/api/private/users": {
-      "post": {
-        "summary": "Create a new user",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "User created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/private/users/{userId}": {
-      "get": {
-        "summary": "Get a single user by ID",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A single user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      }
-    },
     "/api/private/posts": {
       "post": {
         "summary": "Create a new post",
@@ -126,7 +69,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Post"
+                "$ref": "#/components/schemas/PostCreate"
               }
             }
           }
@@ -147,7 +90,7 @@
     },
     "/api/private/posts/{postId}": {
       "put": {
-        "summary": "Update a post by ID",
+        "summary": "Update an existing post",
         "parameters": [
           {
             "name": "postId",
@@ -163,7 +106,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Post"
+                "$ref": "#/components/schemas/PostUpdate"
               }
             }
           }
@@ -185,7 +128,7 @@
         }
       },
       "delete": {
-        "summary": "Delete a post by ID",
+        "summary": "Delete an existing post",
         "parameters": [
           {
             "name": "postId",
@@ -206,15 +149,25 @@
         }
       }
     },
-    "/api/private/comments": {
+    "/api/private/posts/{postId}/comments": {
       "post": {
-        "summary": "Create a new comment",
+        "summary": "Create a comment on a post",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Comment"
+                "$ref": "#/components/schemas/CommentCreate"
               }
             }
           }
@@ -235,7 +188,7 @@
     },
     "/api/private/comments/{commentId}": {
       "put": {
-        "summary": "Update a comment by ID",
+        "summary": "Update an existing comment",
         "parameters": [
           {
             "name": "commentId",
@@ -251,7 +204,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Comment"
+                "$ref": "#/components/schemas/CommentUpdate"
               }
             }
           }
@@ -273,7 +226,7 @@
         }
       },
       "delete": {
-        "summary": "Delete a comment by ID",
+        "summary": "Delete an existing comment",
         "parameters": [
           {
             "name": "commentId",
@@ -309,12 +262,13 @@
             "format": "email"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "required": [
-          "email",
-          "name"
+          "id",
+          "email"
         ]
       },
       "Post": {
@@ -335,13 +289,54 @@
             "type": "boolean"
           },
           "authorId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/components/schemas/User"
           }
         },
         "required": [
+          "id",
           "title",
+          "published",
           "authorId"
+        ]
+      },
+      "PostCreate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "published": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "PostUpdate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "published": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title"
         ]
       },
       "Comment": {
@@ -355,33 +350,42 @@
             "type": "string"
           },
           "postId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "authorId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/components/schemas/User"
           }
         },
         "required": [
+          "id",
           "text",
           "postId",
           "authorId"
         ]
       },
-      "Category": {
+      "CommentCreate": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
+          "text": {
             "type": "string"
           }
         },
         "required": [
-          "name"
+          "text"
+        ]
+      },
+      "CommentUpdate": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
         ]
       }
     }
