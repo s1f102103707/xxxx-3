@@ -22,14 +22,14 @@ export const AuthLoader = () => {
 
     const handleSignedOut = async () => {
       if (user?.id !== undefined) {
-        await apiClient.api.private.session.$delete().catch(returnNull);
+        await apiClient.private.session.$delete().catch(returnNull);
         setUser(null);
       }
     };
 
     const handleSignedIn = async (session: { user: { id: string }; access_token: string }) => {
       if (user?.id !== session.user.id) {
-        const fetchedUser = await apiClient.api.private.users
+        const fetchedUser = await apiClient.private.users
           ._userId(session.user.id)
           .$get()
           .catch(returnNull);
