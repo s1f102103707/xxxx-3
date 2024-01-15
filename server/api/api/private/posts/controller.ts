@@ -8,7 +8,7 @@ export default defineController(() => ({
         title: body.title,
         content: body.content,
         published: body.published ?? false,
-        authorId: body.authorId
+        authorId: body.authorId,
       },
     });
     return { status: 201, body: post };

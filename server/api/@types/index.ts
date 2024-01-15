@@ -1,43 +1,43 @@
 /* eslint-disable */
 export type User = {
-  id: string
-  email: string
-  name?: string | null | undefined
-}
+  id: string;
+  email: string;
+  name?: string | null | undefined;
+};
 
 export type Post = {
-  id: string
-  title: string
-  content?: string | null | undefined
-  published: boolean
-  authorId: string
-  author?: User | undefined
-}
+  id: string;
+  title: string;
+  content?: string | null | undefined;
+  published: boolean;
+  authorId: string;
+  author?: User | undefined;
+};
 
 export type PostCreate = {
-  title: string
-  content?: string | null | undefined
-  published?: boolean | undefined
-}
+  title: string;
+  content?: string | null | undefined;
+  published?: boolean | undefined;
+};
 
 export type PostUpdate = {
-  title: string
-  content?: string | null | undefined
-  published?: boolean | undefined
-}
+  title: string;
+  content?: string | null | undefined;
+  published?: boolean | undefined;
+};
 
 export type Comment = {
-  id: string
-  text: string
-  postId: string
-  authorId: string
-  author?: User | undefined
-}
+  id: string;
+  text: string;
+  postId: string;
+  authorId: string;
+  author?: User | undefined;
+};
 
 export type CommentCreate = {
-  text: string
-}
+  text: string;
+};
 
 export type CommentUpdate = {
-  text: string
-}
+  text: string;
+};
