@@ -122,5 +122,109 @@
   {
     "source": "server/domain/useCase/userUseCase.ts",
     "content": "import type { UserModel } from '$/api/@types/models';\nimport type { JwtUser } from '$/domain/model/userModel';\nimport { userModel } from '$/domain/model/userModel';\nimport { userRepo } from '$/domain/repository/userRepo';\nimport { transaction } from '$/service/prismaClient';\n\nexport const userUseCase = {\n  findOrCreate: (jwtUser: JwtUser) =>\n    transaction<UserModel>('RepeatableRead', async (tx) => {\n      const user = await userRepo.findById(tx, jwtUser.sub);\n      if (user !== null) return user;\n\n      const newUser = userModel.create(jwtUser);\n      await userRepo.save(tx, newUser);\n\n      return newUser;\n    }),\n};\n"
+  },
+  {
+    "source": "server/api/$api.ts",
+    "content": "import type { AspidaClient, BasicHeaders } from 'aspida';\nimport type { Methods as Methods_cvv211 } from './api/private/comments';\nimport type { Methods as Methods_vhg5dq } from './api/private/comments/_commentId@string';\nimport type { Methods as Methods_1fk8e42 } from './api/private/posts';\nimport type { Methods as Methods_jyfe28 } from './api/private/posts/_postId@string';\nimport type { Methods as Methods_11difg9 } from './api/private/users';\nimport type { Methods as Methods_1bgw96m } from './api/private/users/_userId@string';\nimport type { Methods as Methods_1q4zt76 } from './api/public/posts';\nimport type { Methods as Methods_1ksoksw } from './api/public/posts/_postId@string';\n\nconst api = <T>({ baseURL, fetch }: AspidaClient<T>) => {\n  const prefix = (baseURL === undefined ? 'http://localhost:3000' : baseURL).replace(/\\/$/, '');\n  const PATH0 = '/api/private/comments';\n  const PATH1 = '/api/private/posts';\n  const PATH2 = '/api/private/users';\n  const PATH3 = '/api/public/posts';\n  const GET = 'GET';\n  const POST = 'POST';\n  const PUT = 'PUT';\n  const DELETE = 'DELETE';\n\n  return {\n    api: {\n      private: {\n        comments: {\n          _commentId: (val3: string) => {\n            const prefix3 = `${PATH0}/${val3}`;\n\n            return {\n              /**\n               * @returns Comment updated successfully\n               */\n              put: (option: { body: Methods_vhg5dq['put']['reqBody'], config?: T | undefined }) =>\n                fetch<Methods_vhg5dq['put']['resBody'], BasicHeaders, Methods_vhg5dq['put']['status']>(prefix, prefix3, PUT, option).json(),\n              /**\n               * @returns Comment updated successfully\n               */\n              $put: (option: { body: Methods_vhg5dq['put']['reqBody'], config?: T | undefined }) =>\n                fetch<Methods_vhg5dq['put']['resBody'], BasicHeaders, Methods_vhg5dq['put']['status']>(prefix, prefix3, PUT, option).json().then(r => r.body),\n              delete: (option?: { config?: T | undefined } | undefined) =>\n                fetch<void, BasicHeaders, Methods_vhg5dq['delete']['status']>(prefix, prefix3, DELETE, option).send(),\n              $delete: (option?: { config?: T | undefined } | undefined) =>\n                fetch<void, BasicHeaders, Methods_vhg5dq['delete']['status']>(prefix, prefix3, DELETE, option).send().then(r => r.body),\n              $path: () => `${prefix}${prefix3}`,\n            };\n          },\n          /**\n           * @returns Comment created successfully\n           */\n          post: (option: { body: Methods_cvv211['post']['reqBody'], config?: T | undefined }) =>\n            fetch<Methods_cvv211['post']['resBody'], BasicHeaders, Methods_cvv211['post']['status']>(prefix, PATH0, POST, option).json(),\n          /**\n           * @returns Comment created successfully\n           */\n          $post: (option: { body: Methods_cvv211['post']['reqBody'], config?: T | undefined }) =>\n            fetch<Methods_cvv211['post']['resBody'], BasicHeaders, Methods_cvv211['post']['status']>(prefix, PATH0, POST, option).json().then(r => r.body),\n          $path: () => `${prefix}${PATH0}`,\n        },\n        posts: {\n          _postId: (val3: string) => {\n            const prefix3 = `${PATH1}/${val3}`;\n\n            return {\n              /**\n               * @returns Post updated successfully\n               */\n              put: (option: { body: Methods_jyfe28['put']['reqBody'], config?: T | undefined }) =>\n                fetch<Methods_jyfe28['put']['resBody'], BasicHeaders, Methods_jyfe28['put']['status']>(prefix, prefix3, PUT, option).json(),\n              /**\n               * @returns Post updated successfully\n               */\n              $put: (option: { body: Methods_jyfe28['put']['reqBody'], config?: T | undefined }) =>\n                fetch<Methods_jyfe28['put']['resBody'], BasicHeaders, Methods_jyfe28['put']['status']>(prefix, prefix3, PUT, option).json().then(r => r.body),\n              delete: (option?: { config?: T | undefined } | undefined) =>\n                fetch<void, BasicHeaders, Methods_jyfe28['delete']['status']>(prefix, prefix3, DELETE, option).send(),\n              $delete: (option?: { config?: T | undefined } | undefined) =>\n                fetch<void, BasicHeaders, Methods_jyfe28['delete']['status']>(prefix, prefix3, DELETE, option).send().then(r => r.body),\n              $path: () => `${prefix}${prefix3}`,\n            };\n          },\n          /**\n           * @returns Post created successfully\n           */\n          post: (option: { body: Methods_1fk8e42['post']['reqBody'], config?: T | undefined }) =>\n            fetch<Methods_1fk8e42['post']['resBody'], BasicHeaders, Methods_1fk8e42['post']['status']>(prefix, PATH1, POST, option).json(),\n          /**\n           * @returns Post created successfully\n           */\n          $post: (option: { body: Methods_1fk8e42['post']['reqBody'], config?: T | undefined }) =>\n            fetch<Methods_1fk8e42['post']['resBody'], BasicHeaders, Methods_1fk8e42['post']['status']>(prefix, PATH1, POST, option).json().then(r => r.body),\n          $path: () => `${prefix}${PATH1}`,\n        },\n        users: {\n          _userId: (val3: string) => {\n            const prefix3 = `${PATH2}/${val3}`;\n\n            return {\n              /**\n               * @returns A single user\n               */\n              get: (option?: { config?: T | undefined } | undefined) =>\n                fetch<Methods_1bgw96m['get']['resBody'], BasicHeaders, Methods_1bgw96m['get']['status']>(prefix, prefix3, GET, option).json(),\n              /**\n               * @returns A single user\n               */\n              $get: (option?: { config?: T | undefined } | undefined) =>\n                fetch<Methods_1bgw96m['get']['resBody'], BasicHeaders, Methods_1bgw96m['get']['status']>(prefix, prefix3, GET, option).json().then(r => r.body),\n              $path: () => `${prefix}${prefix3}`,\n            };\n          },\n          /**\n           * @returns User created successfully\n           */\n          post: (option: { body: Methods_11difg9['post']['reqBody'], config?: T | undefined }) =>\n            fetch<Methods_11difg9['post']['resBody'], BasicHeaders, Methods_11difg9['post']['status']>(prefix, PATH2, POST, option).json(),\n          /**\n           * @returns User created successfully\n           */\n          $post: (option: { body: Methods_11difg9['post']['reqBody'], config?: T | undefined }) =>\n            fetch<Methods_11difg9['post']['resBody'], BasicHeaders, Methods_11difg9['post']['status']>(prefix, PATH2, POST, option).json().then(r => r.body),\n          $path: () => `${prefix}${PATH2}`,\n        },\n      },\n      public: {\n        posts: {\n          _postId: (val3: string) => {\n            const prefix3 = `${PATH3}/${val3}`;\n\n            return {\n              /**\n               * @returns A single post\n               */\n              get: (option?: { config?: T | undefined } | undefined) =>\n                fetch<Methods_1ksoksw['get']['resBody'], BasicHeaders, Methods_1ksoksw['get']['status']>(prefix, prefix3, GET, option).json(),\n              /**\n               * @returns A single post\n               */\n              $get: (option?: { config?: T | undefined } | undefined) =>\n                fetch<Methods_1ksoksw['get']['resBody'], BasicHeaders, Methods_1ksoksw['get']['status']>(prefix, prefix3, GET, option).json().then(r => r.body),\n              $path: () => `${prefix}${prefix3}`,\n            };\n          },\n          /**\n           * @returns An array of posts\n           */\n          get: (option?: { config?: T | undefined } | undefined) =>\n            fetch<Methods_1q4zt76['get']['resBody'], BasicHeaders, Methods_1q4zt76['get']['status']>(prefix, PATH3, GET, option).json(),\n          /**\n           * @returns An array of posts\n           */\n          $get: (option?: { config?: T | undefined } | undefined) =>\n            fetch<Methods_1q4zt76['get']['resBody'], BasicHeaders, Methods_1q4zt76['get']['status']>(prefix, PATH3, GET, option).json().then(r => r.body),\n          $path: () => `${prefix}${PATH3}`,\n        },\n      },\n    },\n  };\n};\n\nexport type ApiInstance = ReturnType<typeof api>;\nexport default api;\n"
+  },
+  {
+    "source": "server/api/@types/index.ts",
+    "content": "/* eslint-disable */\nexport type User = {\n  id?: string | undefined\n  email: string\n  name: string\n}\n\nexport type Post = {\n  id?: string | undefined\n  title: string\n  content?: string | null | undefined\n  published?: boolean | undefined\n  authorId: string\n}\n\nexport type Comment = {\n  id?: string | undefined\n  text: string\n  postId: string\n  authorId: string\n}\n\nexport type Category = {\n  id?: string | undefined\n  name: string\n}\n"
+  },
+  {
+    "source": "server/api/api/private/comments/_commentId@string/index.ts",
+    "content": "/* eslint-disable */\nimport type * as Types from '../../../../@types'\n\nexport type Methods = {\n  put: {\n    status: 200\n    /** Comment updated successfully */\n    resBody: Types.Comment\n    reqBody: Types.Comment\n  }\n\n  delete: {\n    status: 204\n  }\n}\n"
+  },
+  {
+    "source": "server/api/api/private/comments/index.ts",
+    "content": "/* eslint-disable */\nimport type * as Types from '../../../@types'\n\nexport type Methods = {\n  post: {\n    status: 201\n    /** Comment created successfully */\n    resBody: Types.Comment\n    reqBody: Types.Comment\n  }\n}\n"
+  },
+  {
+    "source": "server/api/api/private/posts/_postId@string/index.ts",
+    "content": "/* eslint-disable */\nimport type * as Types from '../../../../@types'\n\nexport type Methods = {\n  put: {\n    status: 200\n    /** Post updated successfully */\n    resBody: Types.Post\n    reqBody: Types.Post\n  }\n\n  delete: {\n    status: 204\n  }\n}\n"
+  },
+  {
+    "source": "server/api/api/private/posts/index.ts",
+    "content": "/* eslint-disable */\nimport type * as Types from '../../../@types'\n\nexport type Methods = {\n  post: {\n    status: 201\n    /** Post created successfully */\n    resBody: Types.Post\n    reqBody: Types.Post\n  }\n}\n"
+  },
+  {
+    "source": "server/api/api/private/users/_userId@string/index.ts",
+    "content": "/* eslint-disable */\nimport type * as Types from '../../../../@types'\n\nexport type Methods = {\n  get: {\n    status: 200\n    /** A single user */\n    resBody: Types.User\n  }\n}\n"
+  },
+  {
+    "source": "server/api/api/private/users/index.ts",
+    "content": "/* eslint-disable */\nimport type * as Types from '../../../@types'\n\nexport type Methods = {\n  post: {\n    status: 201\n    /** User created successfully */\n    resBody: Types.User\n    reqBody: Types.User\n  }\n}\n"
+  },
+  {
+    "source": "server/api/api/public/posts/_postId@string/index.ts",
+    "content": "/* eslint-disable */\nimport type * as Types from '../../../../@types'\n\nexport type Methods = {\n  get: {\n    status: 200\n    /** A single post */\n    resBody: Types.Post\n  }\n}\n"
+  },
+  {
+    "source": "server/api/api/public/posts/index.ts",
+    "content": "/* eslint-disable */\nimport type * as Types from '../../../@types'\n\nexport type Methods = {\n  get: {\n    status: 200\n    /** An array of posts */\n    resBody: Types.Post[]\n  }\n}\n"
+  },
+  {
+    "source": "server/api/private/comments/_commentId@string/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  put: async ({ params, body }) => {\n    const comment = await prismaClient.comment.update({\n      where: { id: params.commentId },\n      data: body,\n    });\n    return { status: 200, body: comment };\n  },\n  delete: async ({ params }) => {\n    await prismaClient.comment.delete({\n      where: { id: params.commentId },\n    });\n    return { status: 204 };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/comments/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  post: async ({ body }) => {\n    const comment = await prismaClient.comment.create({\n      data: body,\n    });\n    return { status: 201, body: comment };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/posts/_postId@string/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  put: async ({ params, body }) => {\n    const post = await prismaClient.post.update({\n      where: { id: params.postId },\n      data: body,\n    });\n    return { status: 200, body: post };\n  },\n  delete: async ({ params }) => {\n    await prismaClient.post.delete({\n      where: { id: params.postId },\n    });\n    return { status: 204 };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/posts/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  post: async ({ body }) => {\n    const post = await prismaClient.post.create({\n      data: body,\n    });\n    return { status: 201, body: post };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/users/_userId@string/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  get: async ({ params }) => {\n    const user = await prismaClient.user.findUniqueOrThrow({\n      where: { id: params.userId },\n    });\n    return { status: 200, body: user };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/users/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  post: async ({ body }) => {\n    const user = await prismaClient.user.create({\n      data: body,\n    });\n    return { status: 201, body: user };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/public/posts/_postId@string/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  get: async ({ params }) => {\n    const post = await prismaClient.post.findUniqueOrThrow({\n      where: { id: params.postId },\n    });\n    return { status: 200, body: post };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/public/posts/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  get: async () => {\n    const posts = await prismaClient.post.findMany();\n    return { status: 200, body: posts };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/comments/_commentId@string/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  put: async ({ params, body }) => {\n    const comment = await prismaClient.comment.update({\n      where: { id: params.commentId },\n      data: body,\n    });\n    return { status: 200, body: comment };\n  },\n  delete: async ({ params }) => {\n    await prismaClient.comment.delete({\n      where: { id: params.commentId },\n    });\n    return { status: 204 };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/comments/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  post: async ({ body }) => {\n    const comment = await prismaClient.comment.create({\n      data: body,\n    });\n    return { status: 201, body: comment };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/posts/_postId@string/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  put: async ({ params, body }) => {\n    const post = await prismaClient.post.update({\n      where: { id: params.postId },\n      data: body,\n    });\n    return { status: 200, body: post };\n  },\n  delete: async ({ params }) => {\n    await prismaClient.post.delete({\n      where: { id: params.postId },\n    });\n    return { status: 204 };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/posts/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  post: async ({ body }) => {\n    const post = await prismaClient.post.create({\n      data: body,\n    });\n    return { status: 201, body: post };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/users/_userId@string/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  get: async ({ params }) => {\n    const user = await prismaClient.user.findUniqueOrThrow({\n      where: { id: params.userId },\n    });\n    return { status: 200, body: user };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/private/users/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  post: async ({ body }) => {\n    const user = await prismaClient.user.create({\n      data: body,\n    });\n    return { status: 201, body: user };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/public/posts/_postId@string/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  get: async ({ params }) => {\n    const post = await prismaClient.post.findUniqueOrThrow({\n      where: { id: params.postId },\n    });\n    return { status: 200, body: post };\n  },\n}));\n"
+  },
+  {
+    "source": "server/api/public/posts/controller.ts",
+    "content": "import { prismaClient } from '$/service/prismaClient';\nimport { defineController } from './$relay';\n\nexport default defineController(() => ({\n  get: async () => {\n    const posts = await prismaClient.post.findMany();\n    return { status: 200, body: posts };\n  },\n}));\n"
   }
 ]

@@ -6,6 +6,6 @@ export type Methods = {
     status: 201
     /** Post created successfully */
     resBody: Types.Post
-    reqBody: Types.Post
+    reqBody: Types.PostCreate
   }
 }

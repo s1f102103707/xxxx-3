@@ -3,9 +3,9 @@ import { defineController } from './$relay';
 
 export default defineController(() => ({
   post: async ({ body }) => {
-    const user = await prismaClient.user.create({
+    const post = await prismaClient.post.create({
       data: body,
     });
-    return { status: 201, body: user };
-  },
+    return { status: 201, body: post };
+  }
 }));
