@@ -3,7 +3,7 @@
   margin: 0 auto;
 }
 
-.tasks {
+.posts {
   width: 600px;
   margin: 0 auto;
   text-align: left;
@@ -71,7 +71,7 @@
 }
 
 @media screen and (max-width: 640px) {
-  .tasks {
+  .posts {
     width: 100%;
     border: none;
   }
