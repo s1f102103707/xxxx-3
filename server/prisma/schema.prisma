@@ -8,28 +8,65 @@ generator client {
 }
 
 model User {
-  id      String    @id @default(uuid())
-  email   String    @unique
-  name    String?
-  posts   Post[]
-  Comment Comment[]
+  id    String @id @default(uuid())
+  email String @unique
+  name  String
+  bets  Bet[]
 }
 
-model Post {
-  id        String    @id @default(uuid())
-  title     String
-  content   String?
-  published Boolean   @default(false)
-  authorId  String
-  author    User      @relation(fields: [authorId], references: [id])
-  comments  Comment[]
+model Race {
+  id          Int           @id @default(autoincrement())
+  date        DateTime
+  location    String
+  distance    Int
+  condition   String
+  horses      HorseOnRace[]
+  raceResults RaceResult[]
+  Bet         Bet[]
 }
 
-model Comment {
-  id       String @id @default(uuid())
-  text     String
-  postId   String
-  post     Post   @relation(fields: [postId], references: [id])
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id])
+model Horse {
+  id         Int           @id @default(autoincrement())
+  name       String
+  races      HorseOnRace[]
+  jockeyId   Int
+  jockey     Jockey        @relation(fields: [jockeyId], references: [id])
+  odds       Float?
+  Bet        Bet[]
+  RaceResult RaceResult[]
+}
+
+model Jockey {
+  id     Int     @id @default(autoincrement())
+  name   String
+  horses Horse[]
+}
+
+model Bet {
+  id      Int    @id @default(autoincrement())
+  userId  String
+  raceId  Int
+  horseId Int
+  amount  Float
+  user    User   @relation(fields: [userId], references: [id])
+  race    Race   @relation(fields: [raceId], references: [id])
+  horse   Horse  @relation(fields: [horseId], references: [id])
+}
+
+model RaceResult {
+  id       Int   @id @default(autoincrement())
+  raceId   Int
+  horseId  Int
+  position Int
+  race     Race  @relation(fields: [raceId], references: [id])
+  horse    Horse @relation(fields: [horseId], references: [id])
+}
+
+model HorseOnRace {
+  raceId  Int
+  horseId Int
+  race    Race  @relation(fields: [raceId], references: [id])
+  horse   Horse @relation(fields: [horseId], references: [id])
+
+  @@id([raceId, horseId])
 }
